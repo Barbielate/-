@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OLIVE ZERO｜0元購物體驗</title>
+<style>
+:root{--g:#9bce26;--gd:#5f8a0b;--ink:#222;--mut:#777;--bg:#fff;--soft:#f5f8ec;--line:#e6e9dd;--pink:#ff5a7a;--card:#fff}
+@media (prefers-color-scheme:dark){:root{--ink:#f1f3ea;--mut:#a3a89a;--bg:#171a12;--soft:#20241a;--line:#33382a;--card:#1d2117;--gd:#b6e053}}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--ink);background:var(--bg);padding-bottom:70px}
+button{font:inherit;cursor:pointer;border:0}
+:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:2px solid var(--g)}
+.top{display:flex;align-items:center;gap:14px;padding:10px 16px;max-width:1100px;margin:auto}
+.logo{font-weight:900;font-size:22px;letter-spacing:-.5px;color:var(--gd)}
+.logo b{background:var(--g);color:#1d2a00;padding:0 6px;border-radius:6px;margin-left:3px}
+.search{flex:1;display:flex;border:2px solid var(--g);border-radius:99px;overflow:hidden;background:var(--card)}
+.search input{flex:1;border:0;padding:9px 14px;font:inherit;background:transparent;color:var(--ink);min-width:0}
+.cartbtn{background:var(--g);color:#1d2a00;font-weight:700;padding:9px 14px;border-radius:99px;white-space:nowrap}
+nav{display:flex;gap:6px;overflow-x:auto;padding:0 16px 10px;max-width:1100px;margin:auto}
+nav button{background:var(--soft);color:var(--ink);padding:7px 14px;border-radius:99px;white-space:nowrap;border:1px solid var(--line)}
+nav button.on{background:var(--ink);color:var(--bg)}
+.hero{max-width:1100px;margin:16px auto;padding:34px 24px;border-radius:20px;background:var(--g);color:#1d2a00;display:flex;justify-content:space-between;align-items:center;gap:20px;overflow:hidden;position:relative}
+.hero h1{font-size:clamp(30px,6vw,56px);line-height:1.1;font-weight:900}
+.hero p{margin-top:10px;font-size:17px}
+.big0{font-size:clamp(90px,18vw,180px);font-weight:900;line-height:.8;color:#fff;text-shadow:5px 5px 0 #1d2a00;transform:rotate(-6deg)}
+.wrap{max-width:1100px;margin:auto;padding:8px 16px}
+.wrap h2{font-size:20px;margin:18px 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.pic{aspect-ratio:1;display:grid;place-items:center;font-size:62px;position:relative}
+.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.row .e img{width:44px;height:44px;object-fit:cover;border-radius:8px;display:block}
+.tag{z-index:1;position:absolute;left:8px;top:8px;background:var(--pink);color:#fff;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px}
+.info{padding:10px;display:flex;flex-direction:column;gap:3px;flex:1}
+.brand{font-size:12px;color:var(--mut)}
+.name{font-size:14px;line-height:1.35;flex:1}
+.old{font-size:12px;color:var(--mut);text-decoration:line-through}
+.price{font-size:22px;font-weight:900;color:var(--pink)}
+.add{margin:0 10px 10px;padding:8px;border-radius:10px;background:var(--ink);color:var(--bg);font-weight:700}
+.add:active{transform:scale(.96)}
+.drawer{position:fixed;inset:0 0 0 auto;width:min(400px,100%);background:var(--bg);z-index:40;transform:translateX(105%);transition:transform .25s;display:flex;flex-direction:column;box-shadow:-8px 0 30px #0004}
+.drawer.open{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid var(--line);font-weight:800}
+.dh button{background:none;font-size:22px;color:var(--ink)}
+.items{flex:1;overflow:auto;padding:8px 16px}
+.row{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.row .e{font-size:30px}
+.row div{flex:1;font-size:14px}
+.qty{display:flex;align-items:center;gap:6px}
+.qty button{width:26px;height:26px;border-radius:50%;background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+.df{padding:16px;border-top:1px solid var(--line)}
+.sum{display:flex;justify-content:space-between;margin-bottom:6px;color:var(--mut)}
+.total{display:flex;justify-content:space-between;font-weight:900;font-size:20px;margin:8px 0 12px}
+.pay{width:100%;padding:14px;border-radius:12px;background:var(--pink);color:#fff;font-weight:800;font-size:17px}
+.pay:disabled{opacity:.4}
+.empty{text-align:center;color:var(--mut);padding:40px 0}
+.mask{position:fixed;inset:0;background:#0006;z-index:30;display:none}
+.mask.on{display:block}
+.modal{position:fixed;inset:0;z-index:60;display:none;place-items:center;background:#000a;padding:20px}
+.modal.on{display:grid}
+.box{background:var(--bg);border-radius:20px;padding:28px;max-width:380px;width:100%;text-align:center}
+.box h3{font-size:26px;margin:8px 0}
+.box .stamp{font-size:64px}
+.box ul{list-style:none;padding:0;margin:14px 0;text-align:left;font-size:14px;max-height:160px;overflow:auto}
+.box .close{background:var(--g);color:#1d2a00;font-weight:800;padding:12px 26px;border-radius:99px}
+.bar{position:fixed;bottom:0;left:0;right:0;background:var(--ink);color:var(--bg);padding:12px 16px;text-align:center;font-size:14px;z-index:15}
+.bit{position:fixed;top:-20px;font-size:26px;z-index:70;pointer-events:none;animation:fall 2.4s linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+@media (prefers-reduced-motion:reduce){.bit{display:none}.drawer{transition:none}}
+@media(max-width:560px){.big0{display:none}.logo{font-size:17px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="logo">OLIVE<b>ZERO</b></div>
+    <label class="search"><input id="q" placeholder="搜尋商品、品牌…" aria-label="搜尋"></label>
+    <button class="cartbtn" id="openCart">🛒 購物車 <span id="cnt">0</span></button>
+  </div>
+  <nav id="tabs"></nav>
+</header>
+
+<section class="hero">
+  <div>
+    <h1>今天全部<br>0 元帶回家</h1>
+    <p>想買多少都可以，結帳只要 ₩0。✨</p>
+  </div>
+  <div class="big0">₩0</div>
+</section>
+
+<main class="wrap">
+  <h2 id="ttl">全部商品</h2>
+  <div class="grid" id="grid"></div>
+</main>
+
+<div class="bar">本站為純娛樂的 0 元購物模擬，不會產生任何真實訂單或扣款 💚</div>
+<div class="mask" id="mask"></div>
+
+<aside class="drawer" id="drawer" aria-label="購物車">
+  <div class="dh"><span>我的購物車</span><button id="closeCart" aria-label="關閉">✕</button></div>
+  <div class="items" id="items"></div>
+  <div class="df">
+    <div class="sum"><span>商品原價</span><span id="orig">₩0</span></div>
+    <div class="sum"><span>0 元購折扣</span><span id="disc">-₩0</span></div>
+    <div class="total"><span>應付金額</span><span>₩0</span></div>
+    <button class="pay" id="pay">0 元結帳 🎉</button>
+  </div>
+</aside>
+
+<div class="modal" id="modal">
+  <div class="box">
+    <div class="stamp">🎁</div>
+    <h3>下單成功！</h3>
+    <p id="saved"></p>
+    <ul id="list"></ul>
+    <button class="close" id="done">再逛一次</button>
+  </div>
+</div>
+
+<script>
+const P=[
+["Lip Tint 霧面唇釉","COLORGRAM","彩妝",18000,"💄","#ffd9e0","images/colorgramLipTint.jpg"],
+["水光精華 50ml","ROUND LAB","保養",32000,"🧴","#e3f3d3"],
+["玫瑰蜜粉餅","CLIO","彩妝",26000,"🌸","#ffe4ec"],
+["積雪草舒緩面膜 10入","Mediheal","面膜",15000,"🧖‍♀️","#d8f0e6"],
+["防曬霜 SPF50+","Beauty of Joseon","防曬",19800,"☀️","#fff3c4"],
+["橄欖油護髮精華","Mise en Scène","美髮",22000,"💆‍♀️","#f6e7d0"],
+["純淨洗面乳","Torriden","保養",14500,"🫧","#d9ecfb"],
+["柔霧眼影盤","Peripera","彩妝",28000,"🎨","#eadcf8"],
+["玻尿酸保濕乳液","Dr.G","保養",29000,"💧","#d9f1f7"],
+["香氛身體乳","Aromatica","身體",16500,"🌿","#e0f2d6"],
+["膠原蛋白軟糖","Olive Young Delight","保健",12900,"🍬","#ffe0cf"],
+["不沾粉底液","Espoir","彩妝",31000,"✨","#f8e2cc"],
+["酵素洗髮精","Ryo","美髮",17500,"🚿","#dff0e8"],
+["護手霜三入組","Innisfree","身體",13500,"🤲","#fbe3ee"],
+["睫毛膏 防水款","Heroine Make","彩妝",21000,"👁️","#e5e2f4"],
+["維他命C錠 60粒","Vitamin Lab","保健",25000,"🍊","#ffe9c2"]
+];
+/* 想用自己的圖片：把圖放進 images/ 資料夾，然後在商品最後面加上檔名，
+   例如 ["Lip Tint","COLORGRAM","彩妝",18000,"💄","#ffd9e0","images/tint.jpg"]
+   沒填或找不到圖片時，會自動顯示 emoji */
+const pic=p=>p[6]?`<img src="${p[6]}" alt="${p[0]}" loading="lazy" onerror="this.outerHTML='${p[4]}'">`:p[4];
+const CATS=["全部商品",...new Set(P.map(p=>p[2]))];
+let cat=CATS[0],kw="",cart={};
+try{cart=JSON.parse(localStorage.getItem("ozcart")||"{}")}catch(e){}
+const $=id=>document.getElementById(id);
+const won=n=>"₩"+n.toLocaleString("en-US");
+const save=()=>{try{localStorage.setItem("ozcart",JSON.stringify(cart))}catch(e){}};
+
+function tabs(){
+  $("tabs").innerHTML=CATS.map(c=>`<button class="${c===cat?"on":""}" data-c="${c}">${c}</button>`).join("");
+}
+function grid(){
+  const l=P.map((p,i)=>({p,i})).filter(({p})=>(cat===CATS[0]||p[2]===cat)&&(p[0]+p[1]).toLowerCase().includes(kw));
+  $("ttl").textContent=cat+"（"+l.length+"）";
+  $("grid").innerHTML=l.length?l.map(({p,i})=>`
+    <article class="card">
+      <div class="pic" style="background:${p[5]}"><span class="tag">100% OFF</span>${pic(p)}</div>
+      <div class="info"><span class="brand">${p[1]}</span><span class="name">${p[0]}</span>
+      <span class="old">${won(p[3])}</span><span class="price">₩0</span></div>
+      <button class="add" data-i="${i}">加入購物車</button>
+    </article>`).join(""):'<p class="empty">找不到商品，換個關鍵字試試</p>';
+}
+function renderCart(){
+  const ids=Object.keys(cart).filter(k=>cart[k]>0);
+  const n=ids.reduce((s,k)=>s+cart[k],0);
+  const o=ids.reduce((s,k)=>s+P[k][3]*cart[k],0);
+  $("cnt").textContent=n;
+  $("orig").textContent=won(o);$("disc").textContent="-"+won(o);
+  $("pay").disabled=!n;
+  $("items").innerHTML=n?ids.map(k=>`<div class="row"><span class="e">${pic(P[k])}</span>
+    <div>${P[k][0]}<br><span class="old">${won(P[k][3])}</span> <b style="color:var(--pink)">₩0</b></div>
+    <span class="qty"><button data-m="${k}" aria-label="減少">−</button>${cart[k]}<button data-p="${k}" aria-label="增加">+</button></span></div>`).join(""):'<p class="empty">購物車是空的，快去挑選吧 🛍️</p>';
+  save();
+}
+function drawer(v){$("drawer").classList.toggle("open",v);$("mask").classList.toggle("on",v)}
+function confetti(){
+  const em=["🎉","💚","✨","💄","🧴","🎁","🌸"];
+  for(let i=0;i<40;i++){const s=document.createElement("span");s.className="bit";
+    s.textContent=em[i%em.length];s.style.left=Math.random()*100+"vw";
+    s.style.animationDelay=Math.random()*.8+"s";document.body.appendChild(s);setTimeout(()=>s.remove(),3500)}
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button");if(!t)return;
+  if(t.dataset.c){cat=t.dataset.c;tabs();grid()}
+  else if(t.dataset.i){cart[t.dataset.i]=(cart[t.dataset.i]||0)+1;renderCart();t.textContent="已加入 ✓";setTimeout(()=>t.textContent="加入購物車",700)}
+  else if(t.dataset.p){cart[t.dataset.p]++;renderCart()}
+  else if(t.dataset.m){cart[t.dataset.m]--;renderCart()}
+});
+$("q").oninput=e=>{kw=e.target.value.trim().toLowerCase();grid()};
+$("openCart").onclick=()=>drawer(true);
+$("closeCart").onclick=$("mask").onclick=()=>drawer(false);
+$("pay").onclick=()=>{
+  const ids=Object.keys(cart).filter(k=>cart[k]>0);
+  const o=ids.reduce((s,k)=>s+P[k][3]*cart[k],0);
+  $("saved").textContent="原價 "+won(o)+"，實付 ₩0，省下 100%！";
+  $("list").innerHTML=ids.map(k=>`<li>${P[k][4]} ${P[k][0]} × ${cart[k]}</li>`).join("");
+  cart={};renderCart();drawer(false);$("modal").classList.add("on");confetti();
+};
+$("done").onclick=()=>$("modal").classList.remove("on");
+tabs();grid();renderCart();
+</script>
+</body>
+</html>
