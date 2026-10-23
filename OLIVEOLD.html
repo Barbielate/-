@@ -159,7 +159,7 @@ function grid(){
     <article class="card">
       <div class="pic" style="background:${p[5]}"><span class="tag">100% OFF</span>${pic(p)}</div>
       <div class="info"><span class="brand">${p[1]}</span><span class="name">${p[0]}</span>
-      <span class="old">${won(p[3])}</span><span class="price">₩0</span></div>
+      <span class="old">${won(p[3])}</span><span class="price">$0</span></div>
       <button class="add" data-i="${i}">加入購物車</button>
     </article>`).join(""):'<p class="empty">找不到商品，換個關鍵字試試</p>';
 }
@@ -171,7 +171,7 @@ function renderCart(){
   $("orig").textContent=won(o);$("disc").textContent="-"+won(o);
   $("pay").disabled=!n;
   $("items").innerHTML=n?ids.map(k=>`<div class="row"><span class="e">${pic(P[k])}</span>
-    <div>${P[k][0]}<br><span class="old">${won(P[k][3])}</span> <b style="color:var(--pink)">₩0</b></div>
+    <div>${P[k][0]}<br><span class="old">${won(P[k][3])}</span> <b style="color:var(--pink)">$0</b></div>
     <span class="qty"><button data-m="${k}" aria-label="減少">−</button>${cart[k]}<button data-p="${k}" aria-label="增加">+</button></span></div>`).join(""):'<p class="empty">購物車是空的，快去挑選吧 🛍️</p>';
   save();
 }
@@ -195,7 +195,7 @@ $("closeCart").onclick=$("mask").onclick=()=>drawer(false);
 $("pay").onclick=()=>{
   const ids=Object.keys(cart).filter(k=>cart[k]>0);
   const o=ids.reduce((s,k)=>s+P[k][3]*cart[k],0);
-  $("saved").textContent="原價 "+won(o)+"，實付 ₩0，省下 100%！";
+  $("saved").textContent="原價 "+won(o)+"，實付 $0，省下 100%！";
   $("list").innerHTML=ids.map(k=>`<li>${P[k][4]} ${P[k][0]} × ${cart[k]}</li>`).join("");
   cart={};renderCart();drawer(false);$("modal").classList.add("on");confetti();
 };
